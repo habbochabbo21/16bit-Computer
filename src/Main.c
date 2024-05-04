@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../header/Counter.h"
+#include "../headers/Counter.h"
 
-int isRuning = true;
+int isRuning = 1;
 
 int main(){
   
