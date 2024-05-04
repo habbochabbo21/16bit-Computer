@@ -8,7 +8,7 @@ COUNT_t newCOUT(){
   cout.reg.content = 0;
   return cout;
 }
-void loadCOUT(COUNT_t* count, short value){
+void loadCOUT(COUNT_t* count, int16_t value){
   count->reg.content = value;
 }
 void incrCount(COUNT_t* count){
