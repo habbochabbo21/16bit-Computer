@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "header\Counter.h"
+#include "..\header\Counter.h"
 
 int main(){
   REG_t reg = newREG();
