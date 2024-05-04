@@ -4,10 +4,8 @@ typedef struct Counter {
   REG_t reg;
 } COUNT_t;
 
-COUNT_t newCOUT(){
-  COUNT_t cout;
-  cout.reg.content = 0;
-  return cout;
+void newCOUT(COUNT_t* count){
+  count->reg.content = 0;
 }
 
 void loadCOUT(COUNT_t* count, uint16_t value){
@@ -26,6 +24,6 @@ void decrCount(COUNT_t* count){
   count->reg.content = c;
 }
 
-short outCount(COUNT_t* count){
+uint16_t outCount(COUNT_t* count){
   return count->reg.content;
 }
