@@ -31,7 +31,7 @@ uint16_t Calc(ALU_t* alu, uint8_t op){
     // DIV
     else if(op & 0b00000100) return (alu->b)?-1:alu->a / alu->b;
     // NOT
-    else if(op & 0b00000101) return alu->b^0x1111;
+    else if(op & 0b00000101) return ~alu->b;
     // AND
     else if(op & 0b00000110) return alu->a&alu->b;
     // OR
