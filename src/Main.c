@@ -2,37 +2,40 @@
 #include "../headers/ALU.h"
 #include "../headers/Memory.h"
 
+#define TRUE 1
+#define FALSE 0
+
 typedef struct Computer {
   REG_t regA,regB,regInst;
   COUNT_t count;
   ALU_t alu;
 } CPU_t;
-
-int isRuning = 1;
-
+// Holt signal
+uint8_t isRuning = TRUE;
+// execute the code on the Memory
 uint8_t Execute(CPU_t* cpu,Mem_t* mem){
-  switch((cpu->regInst.content & 0xFF00)>>8){
+  switch(cpu->regInst.content & 0x00FF){
     // NOP
     case 0x00:
     break;
     // Load from Memory to A register
     case 0x01:{
-      loadREG(&mem->regMem,outREG(&cpu->regInst)& 0x00ff);
+      loadREG(&mem->regMem,(outREG(&cpu->regInst)& 0xFF00)>>8);
       loadREG(&cpu->regA,outMem(mem));
     }break;
     // Load from Memory to B register
     case 0x02:{
-      loadREG(&mem->regMem,outREG(&cpu->regInst)& 0x00ff);
+      loadREG(&mem->regMem,(outREG(&cpu->regInst)& 0xFF00)>>8);
       loadREG(&cpu->regB,outMem(mem));
     }break;
     // Store to Memory from A register
     case 0x03:{
-      loadREG(&mem->regMem,outREG(&cpu->regInst)& 0x00ff);
+      loadREG(&mem->regMem,(outREG(&cpu->regInst)& 0xFF00)>>8);
       loadMem(mem,outREG(&cpu->regA));
     }break;
     // Store to Memory from B register
     case 0x04:{
-      loadREG(&mem->regMem,outREG(&cpu->regInst)& 0x00ff);
+      loadREG(&mem->regMem,(outREG(&cpu->regInst)& 0xFF00)>>8);
       loadMem(mem,outREG(&cpu->regB));
     }break;
     // ADD A to B
@@ -97,7 +100,7 @@ uint8_t Execute(CPU_t* cpu,Mem_t* mem){
     }break;
     // HLT
     case 0xFF:
-      isRuning = 0;
+      isRuning = FALSE;
     break;
     default:
       perror("Instruction undefined!\n");
@@ -116,7 +119,7 @@ int main(int argc, char* argv[]){
   while(isRuning){
     loadREG(&mem.regMem,outCount(&cpu.count));
     loadREG(&cpu.regInst,outMem(&mem));
-    printf("count:%04x|A:%04x|B:%04x|Inst:%02x|InstV:%02x|Mem:%04x|\n",outCount(&cpu.count),outREG(&cpu.regA),outREG(&cpu.regB),(outREG(&cpu.regInst)& 0xFF00)>>8,outREG(&cpu.regInst)&0x00ff,outREG(&mem.regMem));
+    printf("count:%04x|A:%04x|B:%04x|Inst:%02x|InstV:%02x|Mem:%04x|\n",outCount(&cpu.count),outREG(&cpu.regA),outREG(&cpu.regB),outREG(&cpu.regInst)& 0x00FF,(outREG(&cpu.regInst)&0xFF00)>>8,outREG(&mem.regMem));
     incrCount(&cpu.count);
     if(Execute(&cpu,&mem)) exit(1);
   }
