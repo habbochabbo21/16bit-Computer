@@ -23,10 +23,14 @@ void readCode(Mem_t* mem, char text[]){
 // print the contenu of the Memory
 // output came with the form : first two caracters is for Address and second two caracters is for Instruction
 void printCode(Mem_t* mem){
+  printf("\nMemory Content\n-------------------------------------------------------------------------------\n");
+  uint8_t i = 0;
   for(uint16_t* p = mem->m; p < mem->m+256;p++){
     printf("%04x ",*p);
+    i++;
+    if(i%16==0) printf("\n");
   }
-  printf("\nPreaparing the Execute...\n");
+  printf("-------------------------------------------------------------------------------\n");
 }
 // store on the Memory in specific address
 void loadMem(Mem_t* mem, uint16_t value){

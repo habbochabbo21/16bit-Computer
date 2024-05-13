@@ -7,7 +7,7 @@
 
 typedef struct Computer {
   REG_t regA,regB,regInst;
-  COUNT_t count;
+  COUNT_t pc,sp,rp;
   ALU_t alu;
 } CPU_t;
 // Holt signal
@@ -93,7 +93,54 @@ uint8_t Execute(CPU_t* cpu,Mem_t* mem){
       setAB(&cpu->alu,outREG(&cpu->regA),outREG(&cpu->regB));
       loadREG(&cpu->regA,Calc(&cpu->alu,8));
     }break;
+    // Shift to left
+    case 0x10:{}break;
+    // Sheft to right
+    case 0x11:{}break;
+    // Rotate to left
+    case 0x12:{}break;
+    // Rotate to right
+    case 0x13:{}break;
+    // Push A into Stack
+    case 0x14:{
+      decrCount(&cpu->sp);
+      loadREG(&mem->regMem,outCount(&cpu->sp));
+      loadMem(mem,outREG(&cpu->regA));
+    }break;
+    // Push B into Stack
+    case 0x15:{
+      decrCount(&cpu->sp);
+      loadREG(&mem->regMem,outCount(&cpu->sp));
+      loadMem(mem,outREG(&cpu->regB));
+    }break;
+    // Pop from Stack into A
+    case 0x16:{
+      loadREG(&mem->regMem,outCount(&cpu->sp));
+      incrCount(&cpu->sp);
+      loadREG(&cpu->regA,outMem(mem));
+    }break;
+    // Pop from Stack into B
+    case 0x17:{
+      loadREG(&mem->regMem,outCount(&cpu->sp));
+      incrCount(&cpu->sp);
+      loadREG(&cpu->regB,outMem(mem));
+    }break;
+    // Call
+    case 0x18:{
+      loadCOUT(&cpu->rp,outCount(&cpu->pc));
+      loadCOUT(&cpu->pc,(outREG(&cpu->regInst)& 0xFF00)>>8);
+    }break;
+    // Return
+    case 0x19:{
+      loadCOUT(&cpu->pc,outCount(&cpu->rp));
+    }break;
+    // Jump
+    case 0x20:{
+      loadCOUT(&cpu->pc,(outREG(&cpu->regInst)& 0xFF00)>>8);
+    }break;
     
+    // 
+    case 0xFD:{}break;
     // OUT A
     case 0xFE:{
       printf("%04x\n",outREG(&cpu->regA));
@@ -115,14 +162,17 @@ int main(int argc, char* argv[]){
   CPU_t cpu;
   readCode(&mem,argv[1]);
   printCode(&mem);
-  newCOUT(&cpu.count);
+  newCOUT(&cpu.pc);
+  loadCOUT(&cpu.sp,0x100);
+  printf("\nPreaparing the Execute...\n");
   while(isRuning){
-    loadREG(&mem.regMem,outCount(&cpu.count));
+    loadREG(&mem.regMem,outCount(&cpu.pc));
     loadREG(&cpu.regInst,outMem(&mem));
-    printf("count:%04x|A:%04x|B:%04x|Inst:%02x|InstV:%02x|Mem:%04x|\n",outCount(&cpu.count),outREG(&cpu.regA),outREG(&cpu.regB),outREG(&cpu.regInst)& 0x00FF,(outREG(&cpu.regInst)&0xFF00)>>8,outREG(&mem.regMem));
-    incrCount(&cpu.count);
+    printf("PC:%04x|SP:%04x|RP:%04x|A:%04x|B:%04x|Inst:%02x|InstV:%02x|Mem:%04x|\n",outCount(&cpu.pc),outCount(&cpu.sp),outCount(&cpu.rp),outREG(&cpu.regA),outREG(&cpu.regB),outREG(&cpu.regInst)& 0x00FF,(outREG(&cpu.regInst)&0xFF00)>>8,outREG(&mem.regMem));
+    incrCount(&cpu.pc);
     if(Execute(&cpu,&mem)) exit(1);
   }
+  printCode(&mem);
 
   return 0;
 }
