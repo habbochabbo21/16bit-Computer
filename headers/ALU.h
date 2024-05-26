@@ -23,21 +23,21 @@ uint16_t Calc(ALU_t* alu, uint8_t op){
     // NOP
     if(!op) return 0;
     // ADD
-    else if(op & 0b00000001) return alu->a + alu->b;
+    else if(op == 0b00000001) return alu->a + alu->b;
     // SUB
-    else if(op & 0b00000010) return alu->a - alu->b;
+    else if(op == 0b00000010) return alu->a - alu->b;
     // MULL
-    else if(op & 0b00000011) return alu->a * alu->b;
+    else if(op == 0b00000011) return alu->a * alu->b;
     // DIV
-    else if(op & 0b00000100) return (alu->b)?-1:alu->a / alu->b;
+    else if(op == 0b00000100) return (alu->b)?-1:alu->a / alu->b;
     // NOT
-    else if(op & 0b00000101) return ~(alu->b);
+    else if(op == 0b00000101) return ~(alu->b);
     // AND
-    else if(op & 0b00000110) return alu->a&alu->b;
+    else if(op == 0b00000110) return alu->a&alu->b;
     // OR
-    else if(op & 0b00000111) return alu->a|alu->b;
+    else if(op == 0b00000111) return alu->a|alu->b;
     // XOR
-    else if(op & 0b00001000) return alu->a^alu->b;
+    else if(op == 0b00001000) return alu->a^alu->b;
     // Other
     else return -1;
 }
