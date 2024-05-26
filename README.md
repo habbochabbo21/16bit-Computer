@@ -1,5 +1,5 @@
 # 16bit-Computer
-i'm creating an emulator of 16 bit computer witch contain CPU, RAM and 7segment display
+i'm creating an emulator of 16 bit computer witch contain CPU, RAM and Display
 # How its work
 after compilation,
 in your terminal, command prompt or powershell, run this command:
