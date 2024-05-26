@@ -8,10 +8,8 @@ typedef struct Register {
     uint16_t content;
 } REG_t;
 // reset the register
-REG_t newREG(){
-  REG_t reg;
-  reg.content = 0;
-  return reg;
+void newREG(REG_t* reg){
+  reg->content = 0;
 }
 // Store to the register
 void loadREG(REG_t* reg, uint16_t value){

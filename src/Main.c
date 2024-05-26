@@ -10,6 +10,14 @@ typedef struct Computer {
   COUNT_t pc,sp,rp;
   ALU_t alu;
 } CPU_t;
+void newCPU(CPU_t* cpu){
+  newREG(&cpu->regA);
+  newREG(&cpu->regB);
+  newREG(&cpu->regInst);
+  newCOUT(&cpu->pc);
+  loadCOUT(&cpu->sp,0x100);
+  newCOUT(&cpu->rp);
+}
 // Holt signal
 uint8_t isRuning = TRUE;
 // execute the code on the Memory
@@ -143,7 +151,7 @@ uint8_t Execute(CPU_t* cpu,Mem_t* mem){
     case 0xFD:{}break;
     // OUT A
     case 0xFE:{
-      printf("%04x\n",outREG(&cpu->regA));
+      printf("%04d\n",outREG(&cpu->regA));
     }break;
     // HLT
     case 0xFF:
@@ -162,8 +170,7 @@ int main(int argc, char* argv[]){
   CPU_t cpu;
   readCode(&mem,argv[1]);
   printCode(&mem);
-  newCOUT(&cpu.pc);
-  loadCOUT(&cpu.sp,0x100);
+  newCPU(&cpu);
   printf("\nPreaparing the Execute...\n");
   while(isRuning){
     loadREG(&mem.regMem,outCount(&cpu.pc));

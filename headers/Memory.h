@@ -5,13 +5,13 @@ typedef struct Memory {
   REG_t regMem;
 } Mem_t;
 // reset the Memory
-void newCount(Mem_t* mem){
+void newMem(Mem_t* mem){
   for(int16_t i=0;i<256;i++) mem->m[i]=0x0000;
 }
 // load the Memory from binary file
 
 void readCode(Mem_t* mem, char text[]){
-  newCount(mem);
+  newMem(mem);
   FILE* file = fopen(text,"rb");
   if(!file) {printf("couldn't open file\n");exit(1);}
   uint16_t buff;
